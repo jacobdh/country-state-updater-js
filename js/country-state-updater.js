@@ -1,11 +1,11 @@
-var CountryStateUpdater = CountryStateUpdater || {};
-CountryStateUpdater = function(options){
+var CountryStateUpdater = function(options){
     options = options || {};
     var countryElem = getElem(options.countryElem);
     var stateElem = getElem(options.stateElem);
     var noCountriesOption = options.noCountriesOption || 'None / Not Applicable';
-    var defaultCountry = options.defaultCountry !== undefined ? options.defaultCountry : 'US';
+    var defaultCountry = options.defaultCountry !== undefined ? options.defaultCountry : null;
     var defaultState = options.defaultState || null;
+    var requiredClass = options.requiredClass || null;
     var countries = options.countries || (CountryStateUpdaterData && CountryStateUpdaterData.countries ? CountryStateUpdaterData.countries : {});
     var states = options.states || (CountryStateUpdaterData && CountryStateUpdaterData.states ? CountryStateUpdaterData.states : {});
 
@@ -32,6 +32,10 @@ CountryStateUpdater = function(options){
             }
         }
 
+        if (requiredClass) {
+            addClass(countryElem, requiredClass);
+        }
+
         addEvent(countryElem, 'change', updateStates);
     }
 
@@ -42,12 +46,21 @@ CountryStateUpdater = function(options){
             }
         }
 
-        var newStates = countryElem.value && states && states[countryElem.value] ? states[countryElem.value] : {'':noCountriesOption};
+        var hasStates = countryElem.value && states && states[countryElem.value];
+        var newStates = hasStates ? states[countryElem.value] : {'':noCountriesOption};
         for (var stateCode in newStates) {
             var optionElem = document.createElement('option');
             optionElem.value = stateCode;
             optionElem.innerHTML = newStates[stateCode];
             stateElem.appendChild(optionElem);
+        }
+
+        if (requiredClass) {
+            if (hasStates) {
+                addClass(stateElem, requiredClass);
+            } else {
+                removeClass(stateElem, requiredClass);
+            }
         }
     }
 
@@ -59,6 +72,16 @@ CountryStateUpdater = function(options){
         }
 
         return x;
+    }
+
+    function addClass(elem, className) {
+        if (!elem.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'))) {
+            elem.className += ' ' + className;
+        }
+    }
+
+    function removeClass(elem, className) {
+        elem.className = elem.className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), '');
     }
 
     // From John Resig: http://ejohn.org/blog/flexible-javascript-events/
