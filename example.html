@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Country/State Updater Example</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style type="text/css">
+            body { background:#eee; font:14px Arial,sans-serif; }
+            #main { margin:40px; padding:40px; border:2px dotted #ccc; border-radius:10px; background:#fff; }
+            h1, p { margin:0 0 20px 0; }
+            select { width:300px; }
+        </style>
+    </head>
+    <body>
+        <div id="main">
+            <h1>Country/State Updater Example</h1>
+            <p>When you select a country, the state options are updated.</p>
+            <form action="">
+                <div>
+                    <select id="country-elem">
+                        <option value="">-- Country --</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="state-elem">
+                        <option value="">-- State --</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        
+        <script src="js/country-state-updater.js"></script>
+        <script src="js/country-state-updater-data-min.js"></script>
+        <script>
+            new CountryStateUpdater({
+                countryElem: 'country-elem',
+                stateElem: 'state-elem',
+                countries: CountryStateUpdaterData.countries, // default value
+                states: CountryStateUpdaterData.states, // default value
+                defaultCountry: null, // default value
+                defaultState: null, // deefault value
+                noCountriesOption: 'None / Not Applicable' // default value
+            });
+        </script>
+    </body>
+</html>
